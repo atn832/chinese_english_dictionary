@@ -3,14 +3,14 @@ import 'package:test/test.dart';
 
 void main() {
   group('A group of tests', () {
-    Awesome awesome;
+    Dictionary d;
 
     setUp(() {
-      awesome = Awesome();
+      d = Dictionary();
     });
 
     test('First Test', () {
-      expect(awesome.isAwesome, isTrue);
+      expect(d.translate('石'), '?');
     });
   });
 }
