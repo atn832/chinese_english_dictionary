@@ -9,8 +9,8 @@ void main() {
       d = Dictionary();
     });
 
-    test('First Test', () {
-      expect(d.translate('石'), '?');
+    test('First Test', () async {
+      expect(await d.translateTraditional('石'), '/rock/stone/stone inscription/one of the eight ancient musical instruments 八音[ba1 yin1]/');
     });
   });
 }

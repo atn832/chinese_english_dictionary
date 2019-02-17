@@ -2,5 +2,5 @@ import 'package:cdict/cdict.dart';
 
 main() {
   var d = Dictionary();
-  print('translation: ${d.translate('石')}');
+  print('translation: ${d.translateTraditional('石')}');
 }
