@@ -10,7 +10,8 @@ void main() {
     });
 
     test('First Test', () async {
-      expect(await d.translateTraditional('石'), '/rock/stone/stone inscription/one of the eight ancient musical instruments 八音[ba1 yin1]/');
+      expect(await d.translateTraditional('石'), 
+        equals(['/rock/stone/stone inscription/one of the eight ancient musical instruments 八音[ba1 yin1]/']));
     });
   });
 }

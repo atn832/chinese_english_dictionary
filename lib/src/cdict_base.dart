@@ -44,8 +44,8 @@ class Dictionary {
     );
   }
 
-  Future<String> translateTraditional(String chinese) async {
+  Future<List<String>> translateTraditional(String chinese) async {
     await init();
-    return traditionalDictionary[chinese].meanings[0];
+    return traditionalDictionary[chinese].meanings;
   }
 }
