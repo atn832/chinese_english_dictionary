@@ -49,6 +49,8 @@ class Dictionary {
 
   Future<List<String>> translateTraditional(String chinese) async {
     init();
-    return Future.value(traditionalDictionary[chinese].meanings);
+    final entry = traditionalDictionary[chinese];
+    final result = entry != null ? entry.meanings : <String>[];
+    return Future.value(result);
   }
 }

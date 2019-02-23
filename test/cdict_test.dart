@@ -9,9 +9,12 @@ void main() {
       d = Dictionary();
     });
 
-    test('First Test', () async {
+    test('Results', () async {
       expect(await d.translateTraditional('石'), 
         equals(['rock', 'stone', 'stone inscription', 'one of the eight ancient musical instruments 八音[ba1 yin1]']));
+    });
+    test('Non existing words', () async {
+      expect(await d.translateTraditional('aaa'), equals([]));
     });
   });
 }
