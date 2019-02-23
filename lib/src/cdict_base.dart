@@ -1,6 +1,5 @@
 import 'package:cdict/src/dictionary_entry.dart';
-import 'package:resource/resource.dart' show Resource;
-import 'dart:convert' show utf8;
+import 'package:cdict/src/cedict_ts.u8.dart';
 
 Map<String, DictionaryEntry> simplifiedDictionary;
 Map<String, DictionaryEntry> traditionalDictionary;
@@ -10,12 +9,11 @@ final entryRegex = RegExp(r'^([^ ]+) ([^ ]+) \[([^\]]+)\] (.+)');
 
 /// Checks if you are awesome. Spoiler: you are.
 class Dictionary {
-  init() async {
+  init() {
     if (simplifiedDictionary != null) {
       return;
     }
-    final resource = new Resource("package:cdict/src/cedict_ts.u8");
-    final string = await resource.readAsString(encoding: utf8);
+    final string = rawDictionary;
     final lines = string.split('\n').where((line) => !line.startsWith('#')).toList();
     final dictionaryEntries = lines.map((line) {
       final matches = entryRegex.allMatches(line);
@@ -50,7 +48,7 @@ class Dictionary {
   }
 
   Future<List<String>> translateTraditional(String chinese) async {
-    await init();
-    return traditionalDictionary[chinese].meanings;
+    init();
+    return Future.value(traditionalDictionary[chinese].meanings);
   }
 }
