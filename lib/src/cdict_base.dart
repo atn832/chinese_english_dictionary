@@ -1,7 +1,6 @@
 import 'package:cdict/src/dictionary_entry.dart';
 import 'package:cdict/src/cedict_ts.u8.dart';
 
-Map<String, DictionaryEntry> simplifiedDictionary;
 Map<String, DictionaryEntry> traditionalDictionary;
 
 //DNA鑒定 DNA鉴定 [D N A jian4 ding4] /DNA test/DNA testing/
@@ -10,7 +9,7 @@ final entryRegex = RegExp(r'^([^ ]+) ([^ ]+) \[([^\]]+)\] (.+)');
 /// Checks if you are awesome. Spoiler: you are.
 class Dictionary {
   init() {
-    if (simplifiedDictionary != null) {
+    if (traditionalDictionary != null) {
       return;
     }
     final string = rawDictionary;
@@ -30,11 +29,6 @@ class Dictionary {
         ..pinyin = pinyin
         ..meanings = getSplitMeanings(meanings);
     }).toList();
-    simplifiedDictionary = Map.fromIterable(
-      dictionaryEntries,
-      key: (entry) => entry.simplified,
-      value: (entry) => entry
-    );
     traditionalDictionary = Map.fromIterable(
       dictionaryEntries,
       key: (entry) => entry.traditional,
