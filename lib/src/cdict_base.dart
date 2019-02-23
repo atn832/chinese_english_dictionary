@@ -29,11 +29,16 @@ class Dictionary {
         ..pinyin = pinyin
         ..meanings = getSplitMeanings(meanings);
     }).toList();
-    traditionalDictionary = Map.fromIterable(
-      dictionaryEntries,
-      key: (entry) => entry.traditional,
-      value: (entry) => entry
-    );
+
+    traditionalDictionary = Map();
+    dictionaryEntries.forEach((entry) {
+      final key = entry.traditional;
+      if (traditionalDictionary.containsKey(key) &&
+          traditionalDictionary[key].meanings.length > entry.meanings.length) {
+        return;
+      }
+      traditionalDictionary[key] = entry;
+    });
   }
 
   // '/rock/stone/stone inscription/one of the eight ancient musical instruments 八音[ba1 yin1]/'
