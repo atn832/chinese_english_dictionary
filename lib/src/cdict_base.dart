@@ -30,7 +30,7 @@ class Dictionary {
         ..traditional = traditional
         ..simplified = simplified
         ..pinyin = pinyin
-        ..meanings = [meanings];
+        ..meanings = getSplitMeanings(meanings);
     }).toList();
     simplifiedDictionary = Map.fromIterable(
       dictionaryEntries,
@@ -42,6 +42,11 @@ class Dictionary {
       key: (entry) => entry.traditional,
       value: (entry) => entry
     );
+  }
+
+  // '/rock/stone/stone inscription/one of the eight ancient musical instruments 八音[ba1 yin1]/'
+  List<String> getSplitMeanings(String slashSeparatedMeanings) {
+    return slashSeparatedMeanings.split('/').where((m) => m.isNotEmpty).toList();
   }
 
   Future<List<String>> translateTraditional(String chinese) async {
