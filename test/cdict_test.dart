@@ -18,5 +18,14 @@ void main() {
     test('Non existing words', () async {
       expect(await d.translateTraditional('aaa'), equals([]));
     });
+
+    test('getVariantSource', () {
+      expect(d.getVariantSource('variant of 概[gai4]'), equals(['概']));
+      expect(d.getVariantSource('child'), equals([]));
+    });
+
+    test('Find variant meanings', () async {
+      expect(await d.translateTraditional('槪'), equals(['general', 'approximate']));
+    });
   });
 }
