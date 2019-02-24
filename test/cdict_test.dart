@@ -20,8 +20,12 @@ void main() {
     });
 
     test('getVariantSource', () {
-      expect(d.getVariantSource('variant of 概[gai4]'), equals(['概']));
+      // No source.
       expect(d.getVariantSource('child'), equals([]));
+      // Single source.
+      expect(d.getVariantSource('variant of 概[gai4]'), equals(['概']));
+      // Multiple source.
+      expect(d.getVariantSource('variant of 獎|奖[jiang3]'), equals(['獎', '奖']));
     });
 
     test('Find variant meanings', () async {

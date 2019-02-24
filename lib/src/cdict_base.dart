@@ -7,7 +7,7 @@ Map<String, DictionaryEntry> traditionalDictionary;
 final entryRegex = RegExp(r'^([^ ]+) ([^ ]+) \[([^\]]+)\] (.+)');
 
 // variant of 概[gai4]
-final singleVariantRegex = RegExp(r'^variant of ([^|]+)\[.+$');
+final singleVariantRegex = RegExp(r'^variant of (.+)\[.+$');
 
 /// Checks if you are awesome. Spoiler: you are.
 class Dictionary {
@@ -43,7 +43,8 @@ class Dictionary {
       traditionalDictionary[key] = entry;
     });
 
-    while(await followedVariants(traditionalDictionary.values));
+    // TODO: follow links for as long as possible.
+    await followedVariants(traditionalDictionary.values);
   }
 
   // '/rock/stone/stone inscription/one of the eight ancient musical instruments 八音[ba1 yin1]/'
@@ -59,7 +60,6 @@ class Dictionary {
   }
 
   Future<bool> followedVariants(Iterable<DictionaryEntry> entries) async {
-    var result = false;
     for (final e in entries) {
       if (e.meanings.every((m) => getVariantSource(m).isEmpty)) continue;
       
@@ -79,7 +79,6 @@ class Dictionary {
       }
       e.meanings = newMeanings;
     }
-    return result;
   }
 
   List<String> getVariantSource(String meaning) {
@@ -87,7 +86,7 @@ class Dictionary {
     if (matches.isEmpty) return [];
 
     final match = matches.first;
-    final variant = match[match.groupCount];
-    return [variant];
+    final variants = match[match.groupCount];
+    return variants.split('|');
   }
 }
