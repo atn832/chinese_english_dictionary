@@ -42,9 +42,6 @@ class Dictionary {
       }
       traditionalDictionary[key] = entry;
     });
-
-    // TODO: follow links for as long as possible.
-    await followedVariants(traditionalDictionary.values);
   }
 
   // '/rock/stone/stone inscription/one of the eight ancient musical instruments 八音[ba1 yin1]/'
@@ -55,30 +52,44 @@ class Dictionary {
   Future<List<String>> translateTraditional(String chinese) async {
     await init();
     final entry = traditionalDictionary[chinese];
-    final result = entry != null ? entry.meanings : <String>[];
-    return Future.value(result);
+    if (entry == null) return Future.value(<String>[]);
+
+    final completeMeanings = followVariants(entry.meanings);
+    return completeMeanings;
   }
 
-  Future<bool> followedVariants(Iterable<DictionaryEntry> entries) async {
-    for (final e in entries) {
-      if (e.meanings.every((m) => getVariantSource(m).isEmpty)) continue;
-      
-      final newMeanings = List<String>();
-      for (final m in e.meanings) {
-        final sources = getVariantSource(m);
-        if (sources.isEmpty) {
-          // Pass-through
-          newMeanings.add(m);
-        } else {
-          // Fetch new meanings
-          for (final s in sources) {
-            final otherMeanings = await translateTraditional(s);
-            newMeanings.addAll(otherMeanings);
-          };
-        }
-      }
-      e.meanings = newMeanings;
+  Future<List<String>> followVariants(List<String> meanings) async {
+    final variantsFollowed = Set<String>();
+    var result = await followVariantsR(meanings, variantsFollowed);
+    while (result.followedSome) {
+      result = await followVariantsR(result.meanings, variantsFollowed);
     }
+    return result.meanings;
+  }
+
+  Future<FollowVariantResult> followVariantsR(List<String> meanings, Set<String> variantsFollowed) async {
+    List<String> newMeanings = List();
+    bool followedSome = false;
+    for (final m in meanings) {
+      final sources = getVariantSource(m);
+      if (sources.isEmpty) {
+        // Pass-through
+        newMeanings.add(m);
+      } else {
+        // Fetch new meanings
+        for (final s in sources) {
+          if (variantsFollowed.contains(s)) continue;
+
+          final otherMeanings = await translateTraditional(s);
+          newMeanings.addAll(otherMeanings);
+          variantsFollowed.add(s);
+          followedSome = true;
+        };
+      }
+    }
+    return FollowVariantResult()
+      ..followedSome = followedSome
+      ..meanings =newMeanings;
   }
 
   List<String> getVariantSource(String meaning) {
@@ -89,4 +100,9 @@ class Dictionary {
     final variants = match[match.groupCount];
     return variants.split('|');
   }
+}
+
+class FollowVariantResult {
+  List<String> meanings;
+  bool followedSome;
 }
