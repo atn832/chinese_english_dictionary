@@ -49,6 +49,11 @@ class Dictionary {
     return slashSeparatedMeanings.split('/').where((m) => m.isNotEmpty).toList();
   }
 
+  Future<Iterable<String>> getEntries() async {
+    await init();
+    return traditionalDictionary.keys;
+  }
+
   Future<List<String>> translateTraditional(String chinese) async {
     await init();
     final entry = traditionalDictionary[chinese];
@@ -56,6 +61,12 @@ class Dictionary {
 
     final completeMeanings = followVariants(entry.meanings);
     return completeMeanings;
+  }
+
+  translateTraditionalDirect(String chinese) {
+    final entry = traditionalDictionary[chinese];
+    if (entry == null) return Future.value(<String>[]);
+    return entry.meanings;
   }
 
   Future<List<String>> followVariants(List<String> meanings) async {
@@ -80,7 +91,7 @@ class Dictionary {
         for (final s in sources) {
           if (variantsFollowed.contains(s)) continue;
 
-          final otherMeanings = await translateTraditional(s);
+          final otherMeanings = await translateTraditionalDirect(s);
           newMeanings.addAll(otherMeanings);
           variantsFollowed.add(s);
           followedSome = true;

@@ -30,6 +30,18 @@ void main() {
 
     test('Find variant meanings', () async {
       expect(await d.translateTraditional('槪'), equals(['general', 'approximate']));
+      expect(await d.translateTraditional('㨿'), equals(['according to',
+              'to act in accordance with',
+              'to depend on',
+              'to seize',
+              'to occupy']));
+    });
+
+    test('Look for infinite loops', () async {
+      final words = await d.getEntries();
+      for (final word in words) {
+        await d.translateTraditional(word);
+      }
     });
   });
 }
