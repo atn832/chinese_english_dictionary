@@ -6,8 +6,8 @@ Map<String, DictionaryEntry> traditionalDictionary;
 // DNA鑒定 DNA鉴定 [D N A jian4 ding4] /DNA test/DNA testing/
 final entryRegex = RegExp(r'^([^ ]+) ([^ ]+) \[([^\]]+)\] (.+)');
 
-// variant of 概[gai4]
-final singleVariantRegex = RegExp(r'^variant of (.+)\[.+$');
+// [old] variant of 概[gai4]
+final singleVariantRegex = RegExp(r'variant of (.+)\[.+$');
 
 /// Checks if you are awesome. Spoiler: you are.
 class Dictionary {
@@ -16,7 +16,8 @@ class Dictionary {
       return;
     }
     final string = rawDictionary;
-    final lines = string.split('\n').where((line) => !line.startsWith('#')).toList();
+    final lines =
+        string.split('\n').where((line) => !line.startsWith('#')).toList();
     final dictionaryEntries = lines.map((line) {
       final matches = entryRegex.allMatches(line);
       assert(matches.length == 1);
@@ -46,7 +47,10 @@ class Dictionary {
 
   // '/rock/stone/stone inscription/one of the eight ancient musical instruments 八音[ba1 yin1]/'
   List<String> getSplitMeanings(String slashSeparatedMeanings) {
-    return slashSeparatedMeanings.split('/').where((m) => m.isNotEmpty).toList();
+    return slashSeparatedMeanings
+        .split('/')
+        .where((m) => m.isNotEmpty)
+        .toList();
   }
 
   Future<Iterable<String>> getEntries() async {
@@ -78,7 +82,8 @@ class Dictionary {
     return result.meanings;
   }
 
-  Future<FollowVariantResult> followVariantsR(List<String> meanings, Set<String> variantsFollowed) async {
+  Future<FollowVariantResult> followVariantsR(
+      List<String> meanings, Set<String> variantsFollowed) async {
     List<String> newMeanings = List();
     bool followedSome = false;
     for (final m in meanings) {
@@ -95,12 +100,13 @@ class Dictionary {
           newMeanings.addAll(otherMeanings);
           variantsFollowed.add(s);
           followedSome = true;
-        };
+        }
+        ;
       }
     }
     return FollowVariantResult()
       ..followedSome = followedSome
-      ..meanings =newMeanings;
+      ..meanings = newMeanings;
   }
 
   List<String> getVariantSource(String meaning) {
