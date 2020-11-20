@@ -42,24 +42,19 @@ void main() {
       expect(d.getVariantSource('variant of 概[gai4]'), equals(['概']));
       // Multiple source.
       expect(d.getVariantSource('variant of 獎|奖[jiang3]'), equals(['獎', '奖']));
+      // old variant of...
+      expect(d.getVariantSource('old variant of 姊[zi3]'), equals(['姊']));
+      // japanese variant of...
+      expect(d.getVariantSource('Japanese variant of 產|产'), equals(['產', '产']));
     });
 
     test('Find variant meanings', () async {
-      // variant of...
+      // variant of 概[gai4]
       expect(await d.translateTraditional('槪'),
-          equals(['general', 'approximate']));
-      expect(
-          await d.translateTraditional('㨿'),
-          equals([
-            'according to',
-            'to act in accordance with',
-            'to depend on',
-            'to seize',
-            'to occupy'
-          ]));
-      // old variant of...
-      expect(await d.translateTraditional('姉'),
-          equals(await d.translateTraditional('姊')));
+          equals(await d.translateTraditional('概')));
+      // variant of 據|据[ju4]
+      expect(await d.translateTraditional('㨿'),
+          equals(await d.translateTraditional('據')));
     });
 
     test('Look for infinite loops', () async {
