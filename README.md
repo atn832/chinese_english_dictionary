@@ -15,6 +15,10 @@ main() {
 }
 ```
 
+## To update the dictionary
+
+Download the latest version from https://www.mdbg.net/chinese/dictionary?page=cc-cedict and copy/paste the dictionary into cedict_ts.u8.dart.
+
 ## Features and bugs
 
 Please file feature requests and bugs at the [issue tracker][tracker].
