@@ -46,6 +46,12 @@ void main() {
       expect(d.getVariantSource('old variant of 姊[zi3]'), equals(['姊']));
       // japanese variant of...
       expect(d.getVariantSource('Japanese variant of 產|产'), equals(['產', '产']));
+      // see...
+      expect(d.getVariantSource('see 犯不著|犯不着[fan4 bu5 zhao2]'),
+          equals(['犯不著', '犯不着']));
+      // see also...
+      expect(
+          d.getVariantSource('see also 新儒家[Xin1 Ru2 jia1]'), equals(['新儒家']));
     });
 
     test('Find variant meanings', () async {

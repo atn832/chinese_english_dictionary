@@ -7,7 +7,7 @@ Map<String, DictionaryEntry> traditionalDictionary;
 final entryRegex = RegExp(r'^([^ ]+) ([^ ]+) \[([^\]]+)\] (.+)');
 
 // [old] variant of 概[gai4]
-final singleVariantRegex = RegExp(r'variant of ([^\[]+)');
+final singleVariantRegex = RegExp(r'(?:see also|see|variant of) ([^\[]+)');
 
 /// Checks if you are awesome. Spoiler: you are.
 class Dictionary {
