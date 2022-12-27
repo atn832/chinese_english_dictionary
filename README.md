@@ -1,7 +1,8 @@
-A library for Dart developers.
+A Chinese-English dictionary based on CC-CEDICT.
 
-Created from templates made available by Stagehand under a BSD-style
-[license](https://github.com/dart-lang/stagehand/blob/master/LICENSE).
+## Features
+
+- Translates traditional Chinese to English.
 
 ## Usage
 
@@ -10,17 +11,17 @@ A simple usage example:
 ```dart
 import 'package:cdict/cdict.dart';
 
-main() {
-  var awesome = new Awesome();
+void main() async {
+  final d = ChineseEnglishDictionary();
+  final translation = await d.translateTraditional('石');
+  print(translation);
 }
 ```
 
-## To update the dictionary
+Prints out:
 
-Download the latest version from https://www.mdbg.net/chinese/dictionary?page=cc-cedict and copy/paste the dictionary into cedict_ts.u8.dart.
+> [rock, stone, stone inscription, one of the eight categories of ancient musical instruments 八音[ba1 yin1]]
 
-## Features and bugs
+## Developer notes
 
-Please file feature requests and bugs at the [issue tracker][tracker].
-
-[tracker]: http://example.com/issues/replaceme
+To update the dictionary, download the latest version from https://www.mdbg.net/chinese/dictionary?page=cc-cedict and copy/paste the dictionary into cedict_ts.u8.dart.

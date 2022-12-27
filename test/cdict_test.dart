@@ -3,10 +3,10 @@ import 'package:test/test.dart';
 
 void main() {
   group('A group of tests', () {
-    Dictionary d;
+    ChineseEnglishDictionary d;
 
     setUp(() {
-      d = Dictionary();
+      d = ChineseEnglishDictionary();
     });
 
     test('Results', () async {
@@ -16,7 +16,7 @@ void main() {
             'rock',
             'stone',
             'stone inscription',
-            'one of the eight ancient musical instruments 八音[ba1 yin1]'
+            'one of the eight categories of ancient musical instruments 八音[ba1 yin1]'
           ]));
       expect(
           await d.translateTraditional('子'),

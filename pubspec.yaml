@@ -1,13 +1,10 @@
-name: cdict
-description: A starting point for Dart libraries or applications.
-# version: 1.0.0
-# homepage: https://www.example.com
-# author: Anh Tuan Nguyen <email@example.com>
+name: chinese_english_dictionary
+description: A Chinese-English dictionary based on CC-CEDICT.
+version: 0.9.0
+homepage: https://www.example.com
 
 environment:
   sdk: '>=2.1.0 <3.0.0'
-
-dependencies:
 
 dev_dependencies:
   pedantic: ^1.0.0

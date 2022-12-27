@@ -4,13 +4,13 @@ import 'package:cdict/src/cedict_ts.u8.dart';
 Map<String, DictionaryEntry> traditionalDictionary;
 
 // DNA鑒定 DNA鉴定 [D N A jian4 ding4] /DNA test/DNA testing/
-final entryRegex = RegExp(r'^([^ ]+) ([^ ]+) \[([^\]]+)\] (.+)');
+final _entryRegex = RegExp(r'^([^ ]+) ([^ ]+) \[([^\]]+)\] (.+)');
 
 // [old] variant of 概[gai4]
-final singleVariantRegex = RegExp(r'(?:see also|see|variant of) ([^\[]+)');
+final _singleVariantRegex = RegExp(r'(?:see also|see|variant of) ([^\[]+)');
 
-/// Checks if you are awesome. Spoiler: you are.
-class Dictionary {
+/// Chinese-English Dictionary.
+class ChineseEnglishDictionary {
   init() async {
     if (traditionalDictionary != null) {
       return;
@@ -19,7 +19,7 @@ class Dictionary {
     final lines =
         string.split('\n').where((line) => !line.startsWith('#')).toList();
     final dictionaryEntries = lines.map((line) {
-      final matches = entryRegex.allMatches(line);
+      final matches = _entryRegex.allMatches(line);
       assert(matches.length == 1);
       final match = matches.first;
       assert(match.groupCount == 4);
@@ -58,6 +58,8 @@ class Dictionary {
     return traditionalDictionary.keys;
   }
 
+  /// Translate traditional Chinese. Automatically replaces references to other
+  /// words such as `variant of 概[gai4]` to that reference's meanings.
   Future<List<String>> translateTraditional(String chinese) async {
     await init();
     final entry = traditionalDictionary[chinese];
@@ -67,9 +69,11 @@ class Dictionary {
     return completeMeanings;
   }
 
-  translateTraditionalDirect(String chinese) {
+  /// Translate traditional Chinese. Leaves references to other words such as
+  /// `variant of 概[gai4]` as is.
+  List<String> translateTraditionalDirect(String chinese) {
     final entry = traditionalDictionary[chinese];
-    if (entry == null) return Future.value(<String>[]);
+    if (entry == null) return [];
     return entry.meanings;
   }
 
@@ -109,8 +113,10 @@ class Dictionary {
       ..meanings = newMeanings;
   }
 
+  /// Internal function to follow links such as `variant of 概[gai4]`. Do not
+  /// use directly.
   List<String> getVariantSource(String meaning) {
-    final matches = singleVariantRegex.allMatches(meaning);
+    final matches = _singleVariantRegex.allMatches(meaning);
     if (matches.isEmpty) return [];
 
     final match = matches.first;

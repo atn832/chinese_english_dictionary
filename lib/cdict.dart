@@ -1,8 +1,4 @@
-/// Support for doing something awesome.
-///
-/// More dartdocs go here.
-library cdict;
+/// Chinese-English Dictionary.
+library chinese_english_dictionary;
 
 export 'src/cdict_base.dart';
-
-// TODO: Export any libraries intended for clients of this package.
