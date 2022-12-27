@@ -1,4 +1,5 @@
 import 'package:chinese_english_dictionary/chinese_english_dictionary.dart';
+import 'package:chinese_english_dictionary/src/util.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -37,21 +38,20 @@ void main() {
 
     test('getVariantSource', () {
       // No source.
-      expect(d.getVariantSource('child'), equals([]));
+      expect(getVariantSource('child'), equals([]));
       // Single source.
-      expect(d.getVariantSource('variant of 概[gai4]'), equals(['概']));
+      expect(getVariantSource('variant of 概[gai4]'), equals(['概']));
       // Multiple source.
-      expect(d.getVariantSource('variant of 獎|奖[jiang3]'), equals(['獎', '奖']));
+      expect(getVariantSource('variant of 獎|奖[jiang3]'), equals(['獎', '奖']));
       // old variant of...
-      expect(d.getVariantSource('old variant of 姊[zi3]'), equals(['姊']));
+      expect(getVariantSource('old variant of 姊[zi3]'), equals(['姊']));
       // japanese variant of...
-      expect(d.getVariantSource('Japanese variant of 產|产'), equals(['產', '产']));
+      expect(getVariantSource('Japanese variant of 產|产'), equals(['產', '产']));
       // see...
-      expect(d.getVariantSource('see 犯不著|犯不着[fan4 bu5 zhao2]'),
+      expect(getVariantSource('see 犯不著|犯不着[fan4 bu5 zhao2]'),
           equals(['犯不著', '犯不着']));
       // see also...
-      expect(
-          d.getVariantSource('see also 新儒家[Xin1 Ru2 jia1]'), equals(['新儒家']));
+      expect(getVariantSource('see also 新儒家[Xin1 Ru2 jia1]'), equals(['新儒家']));
     });
 
     test('Find variant meanings', () async {

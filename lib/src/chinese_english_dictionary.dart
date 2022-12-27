@@ -1,13 +1,11 @@
 import 'cedict_ts.u8.dart';
 import 'dictionary_entry.dart';
+import 'util.dart';
 
 Map<String, DictionaryEntry> _traditionalDictionary;
 
 // DNA鑒定 DNA鉴定 [D N A jian4 ding4] /DNA test/DNA testing/
 final _entryRegex = RegExp(r'^([^ ]+) ([^ ]+) \[([^\]]+)\] (.+)');
-
-// [old] variant of 概[gai4]
-final _singleVariantRegex = RegExp(r'(?:see also|see|variant of) ([^\[]+)');
 
 /// Chinese-English Dictionary.
 class ChineseEnglishDictionary {
@@ -31,7 +29,7 @@ class ChineseEnglishDictionary {
         ..traditional = traditional
         ..simplified = simplified
         ..pinyin = pinyin
-        ..meanings = getSplitMeanings(meanings);
+        ..meanings = _getSplitMeanings(meanings);
     }).toList();
 
     _traditionalDictionary = {};
@@ -46,7 +44,7 @@ class ChineseEnglishDictionary {
   }
 
   // '/rock/stone/stone inscription/one of the eight ancient musical instruments 八音[ba1 yin1]/'
-  List<String> getSplitMeanings(String slashSeparatedMeanings) {
+  static List<String> _getSplitMeanings(String slashSeparatedMeanings) {
     return slashSeparatedMeanings
         .split('/')
         .where((m) => m.isNotEmpty)
@@ -65,7 +63,7 @@ class ChineseEnglishDictionary {
     final entry = _traditionalDictionary[chinese];
     if (entry == null) return Future.value(<String>[]);
 
-    final completeMeanings = followVariants(entry.meanings);
+    final completeMeanings = _followVariants(entry.meanings);
     return completeMeanings;
   }
 
@@ -77,7 +75,7 @@ class ChineseEnglishDictionary {
     return entry.meanings;
   }
 
-  List<String> followVariants(List<String> meanings) {
+  List<String> _followVariants(List<String> meanings) {
     final variantsFollowed = <String>{};
     var result = _followVariantsR(meanings, variantsFollowed);
     while (result.followedSome) {
@@ -111,17 +109,6 @@ class ChineseEnglishDictionary {
     return _FollowVariantResult()
       ..followedSome = followedSome
       ..meanings = newMeanings;
-  }
-
-  /// Internal function to follow links such as `variant of 概[gai4]`. Do not
-  /// use directly.
-  List<String> getVariantSource(String meaning) {
-    final matches = _singleVariantRegex.allMatches(meaning);
-    if (matches.isEmpty) return [];
-
-    final match = matches.first;
-    final variants = match[match.groupCount];
-    return variants.split('|');
   }
 }
 
