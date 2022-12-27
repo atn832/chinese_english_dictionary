@@ -1,7 +1,8 @@
 name: chinese_english_dictionary
 description: A Chinese-English dictionary based on CC-CEDICT.
 version: 0.9.0
-homepage: https://www.example.com
+repository: https://github.com/atn832/chinese_english_dictionary
+homepage: https://www.wafrat.com
 
 environment:
   sdk: '>=2.2.0 <3.0.0'

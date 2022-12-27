@@ -1,3 +1,7 @@
+# Chinese-English Dictionary
+
+[![pub package](https://img.shields.io/pub/v/chinese_english_dictionary.svg)](https://pub.dartlang.org/packages/chinese_english_dictionary)
+
 A Chinese-English dictionary based on CC-CEDICT.
 
 ## Features
