@@ -1,4 +1,4 @@
-import 'package:cdict/cdict.dart';
+import 'package:chinese_english_dictionary/chinese_english_dictionary.dart';
 
 void main() async {
   final d = ChineseEnglishDictionary();

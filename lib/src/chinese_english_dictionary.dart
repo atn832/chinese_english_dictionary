@@ -1,5 +1,5 @@
-import 'package:cdict/src/dictionary_entry.dart';
-import 'package:cdict/src/cedict_ts.u8.dart';
+import 'cedict_ts.u8.dart';
+import 'dictionary_entry.dart';
 
 Map<String, DictionaryEntry> traditionalDictionary;
 
@@ -11,7 +11,7 @@ final _singleVariantRegex = RegExp(r'(?:see also|see|variant of) ([^\[]+)');
 
 /// Chinese-English Dictionary.
 class ChineseEnglishDictionary {
-  init() async {
+  Future<void> init() async {
     if (traditionalDictionary != null) {
       return;
     }
@@ -34,7 +34,7 @@ class ChineseEnglishDictionary {
         ..meanings = getSplitMeanings(meanings);
     }).toList();
 
-    traditionalDictionary = Map();
+    traditionalDictionary = {};
     dictionaryEntries.forEach((entry) {
       final key = entry.traditional;
       if (traditionalDictionary.containsKey(key) &&
@@ -77,19 +77,19 @@ class ChineseEnglishDictionary {
     return entry.meanings;
   }
 
-  Future<List<String>> followVariants(List<String> meanings) async {
-    final variantsFollowed = Set<String>();
-    var result = await followVariantsR(meanings, variantsFollowed);
+  List<String> followVariants(List<String> meanings) {
+    final variantsFollowed = <String>{};
+    var result = followVariantsR(meanings, variantsFollowed);
     while (result.followedSome) {
-      result = await followVariantsR(result.meanings, variantsFollowed);
+      result = followVariantsR(result.meanings, variantsFollowed);
     }
     return result.meanings;
   }
 
-  Future<FollowVariantResult> followVariantsR(
-      List<String> meanings, Set<String> variantsFollowed) async {
-    List<String> newMeanings = List();
-    bool followedSome = false;
+  FollowVariantResult followVariantsR(
+      List<String> meanings, Set<String> variantsFollowed) {
+    var newMeanings = <String>[];
+    var followedSome = false;
     for (final m in meanings) {
       final sources = getVariantSource(m);
       if (sources.isEmpty) {
@@ -100,7 +100,7 @@ class ChineseEnglishDictionary {
         for (final s in sources) {
           if (variantsFollowed.contains(s)) continue;
 
-          final otherMeanings = await translateTraditionalDirect(s);
+          final otherMeanings = translateTraditionalDirect(s);
           newMeanings.addAll(otherMeanings);
           variantsFollowed.add(s);
           followedSome = true;

@@ -1,4 +1,4 @@
-import 'package:cdict/cdict.dart';
+import 'package:chinese_english_dictionary/chinese_english_dictionary.dart';
 import 'package:test/test.dart';
 
 void main() {
