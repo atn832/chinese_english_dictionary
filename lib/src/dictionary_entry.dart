@@ -1,6 +1,6 @@
 class DictionaryEntry {
-  String traditional;
-  String simplified;
-  String pinyin;
-  List<String> meanings;
+  late String traditional;
+  late String simplified;
+  late String pinyin;
+  late List<String> meanings;
 }

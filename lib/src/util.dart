@@ -9,5 +9,5 @@ List<String> getVariantSource(String meaning) {
 
   final match = matches.first;
   final variants = match[match.groupCount];
-  return variants.split('|');
+  return variants!.split('|');
 }

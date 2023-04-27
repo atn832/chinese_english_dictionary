@@ -4,7 +4,7 @@ import 'package:test/test.dart';
 
 void main() {
   group('A group of tests', () {
-    ChineseEnglishDictionary d;
+    late ChineseEnglishDictionary d;
 
     setUp(() {
       d = ChineseEnglishDictionary();
