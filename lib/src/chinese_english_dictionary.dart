@@ -2,7 +2,8 @@ import 'cedict_ts.u8.dart';
 import 'dictionary_entry.dart';
 import 'util.dart';
 
-Map<String, DictionaryEntry>? _traditionalDictionary;
+bool _traditionalDictionaryInitialized = false;
+Map<String, DictionaryEntry> _traditionalDictionary = {};
 
 // DNA鑒定 DNA鉴定 [D N A jian4 ding4] /DNA test/DNA testing/
 final _entryRegex = RegExp(r'^([^ ]+) ([^ ]+) \[([^\]]+)\] (.+)');
@@ -10,9 +11,11 @@ final _entryRegex = RegExp(r'^([^ ]+) ([^ ]+) \[([^\]]+)\] (.+)');
 /// Chinese-English Dictionary.
 class ChineseEnglishDictionary {
   Future<void> _init() async {
-    if (_traditionalDictionary != null) {
+    if (_traditionalDictionaryInitialized) {
       return;
     }
+    _traditionalDictionaryInitialized = true;
+
     final string = rawDictionary;
     final lines =
         string.split('\n').where((line) => !line.startsWith('#')).toList();
@@ -32,15 +35,14 @@ class ChineseEnglishDictionary {
         ..meanings = _getSplitMeanings(meanings!);
     }).toList();
 
-    _traditionalDictionary = {};
     dictionaryEntries.forEach((entry) {
       final key = entry.traditional;
-      if (_traditionalDictionary!.containsKey(key) &&
-          _traditionalDictionary![key]!.meanings.length >
+      if (_traditionalDictionary.containsKey(key) &&
+          _traditionalDictionary[key]!.meanings.length >
               entry.meanings.length) {
         return;
       }
-      _traditionalDictionary![key] = entry;
+      _traditionalDictionary[key] = entry;
     });
   }
 
@@ -54,14 +56,14 @@ class ChineseEnglishDictionary {
 
   Future<Iterable<String>> getEntries() async {
     await _init();
-    return _traditionalDictionary!.keys;
+    return _traditionalDictionary.keys;
   }
 
   /// Translate traditional Chinese. Automatically replaces references to other
   /// words such as `variant of 概[gai4]` to that reference's meanings.
   Future<List<String>> translateTraditional(String chinese) async {
     await _init();
-    final entry = _traditionalDictionary![chinese];
+    final entry = _traditionalDictionary[chinese];
     if (entry == null) return Future.value(<String>[]);
 
     final completeMeanings = _followVariants(entry.meanings);
@@ -71,7 +73,7 @@ class ChineseEnglishDictionary {
   /// Translate traditional Chinese. Leaves references to other words such as
   /// `variant of 概[gai4]` as is.
   List<String> translateTraditionalDirect(String chinese) {
-    final entry = _traditionalDictionary![chinese];
+    final entry = _traditionalDictionary[chinese];
     if (entry == null) return [];
     return entry.meanings;
   }
